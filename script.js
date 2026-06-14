@@ -1,4 +1,3 @@
-let students = JSON.parse(localStorage.getItem("students")) || [];
 const addButton = document.getElementById("addBtn");
 const table = document.getElementById("studentTable");
 
@@ -17,13 +16,6 @@ addButton.addEventListener("click", function () {
 
     const row = table.insertRow();
 
-    students.push({
-    name: name,
-    roll: roll,
-    marks: marks
-});
-
-saveStudents();
     row.insertCell(0).innerHTML = name;
     row.insertCell(1).innerHTML = roll;
     row.insertCell(2).innerHTML = marks;
@@ -60,19 +52,10 @@ function searchStudent() {
         let name = rows[i].cells[0].innerText.toLowerCase();
         let roll = rows[i].cells[1].innerText.toLowerCase();
 
-        if (
-            name.includes(input) ||
-            roll.includes(input)
-        ) {
+        if (name.includes(input) || roll.includes(input)) {
             rows[i].style.display = "";
         } else {
             rows[i].style.display = "none";
         }
     }
-}
-function saveStudents() {
-    localStorage.setItem(
-        "students",
-        JSON.stringify(students)
-    );
 }
