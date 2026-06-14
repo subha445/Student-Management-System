@@ -1,30 +1,128 @@
 body {
-  font-family: Arial;
-  text-align: center;
-  background: #f4f4f4;
-}
-
-input {
-  margin: 5px;
-  padding: 8px;
-}
-
-button {
-  padding: 8px 12px;
-  background: green;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: white;
-  border: none;
-  cursor: pointer;
+  text-align: center;
 }
 
+/* LOGIN PAGE */
+#loginPage {
+  margin-top: 120px;
+}
+
+#loginPage h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+#loginPage input {
+  display: block;
+  margin: 10px auto;
+  padding: 12px;
+  width: 250px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+}
+
+#loginPage button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #00c6ff;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#loginPage button:hover {
+  background: #0072ff;
+  transform: scale(1.05);
+}
+
+/* MAIN APP */
+#app {
+  padding: 20px;
+}
+
+/* HEADINGS */
+h1, h2 {
+  margin: 10px 0;
+}
+
+/* INPUT FIELDS */
+input {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+/* BUTTONS */
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 6px;
+  background: #00c6ff;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #0072ff;
+  transform: scale(1.05);
+}
+
+/* TABLE */
 table {
-  margin: auto;
+  margin: 20px auto;
   width: 90%;
   border-collapse: collapse;
   background: white;
+  color: black;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
 }
 
-th, td {
-  border: 1px solid black;
-  padding: 8px;
+th {
+  background: #0072ff;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* INPUT ROW */
+input {
+  margin: 6px;
+}
+
+/* CHART BOX */
+canvas {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 20px;
+  max-width: 90%;
+}
+
+/* SMALL RESPONSIVE FIX */
+@media (max-width: 600px) {
+  input {
+    width: 90%;
+  }
+
+  table {
+    font-size: 12px;
+  }
 }
