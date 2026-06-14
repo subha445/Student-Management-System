@@ -1,69 +1,86 @@
-const addButton = document.getElementById("addBtn");
-const table = document.getElementById("studentTable");
+let students = [];
 
-// 💾 Local Storage la irunthu data eduthuko
-let students = JSON.parse(localStorage.getItem('students')) || [];
-let editIndex = -1;
+// Load from LocalStorage
+window.onload = function () {
+  let data = localStorage.getItem("students");
+  if (data) {
+    students = JSON.parse(data);
+    renderTable();
+  }
+};
 
-let totalStudents = students.length;
-
-// Page load aana udane table la kaatu
-window.onload = function(){
-    displayStudents();
-    updateStats();
+function saveData() {
+  localStorage.setItem("students", JSON.stringify(students));
 }
-
-addButton.addEventListener("click", function () {
-    addStudent();
-});
 
 function addStudent() {
-    const name = document.getElementById("name").value.trim();
-    const roll = document.getElementById("roll").value.trim();
-    const marks = parseInt(document.getElementById("marks").value);
+  let name = document.getElementById("name").value;
+  let roll = document.getElementById("roll").value;
+  let marks = document.getElementById("marks").value;
+  let attendance = document.getElementById("attendance").value;
 
-    if (name === "" || roll === "" || isNaN(marks) || marks < 0 || marks > 100) {
-        alert("Please fill all fields. Marks 0-100 mattum");
-        return;
-    }
+  if (!name || !roll || !marks || !attendance) return;
 
-    if(editIndex === -1){
-        // Add new student
-        students.push({name, roll, marks});
-    }else{
-        // 📝 Update existing student
-        students[editIndex] = {name, roll, marks};
-        editIndex = -1;
-        addButton.innerText = "Add Student";
-    }
+  students.push({
+    name,
+    roll,
+    marks: Number(marks),
+    attendance: Number(attendance),
+  });
 
-    // 💾 Save to Local Storage
-    saveData();
-    displayStudents();
-    updateStats();
-
-    document.getElementById("name").value = "";
-    document.getElementById("roll").value = "";
-    document.getElementById("marks").value = "";
+  saveData();
+  renderTable();
 }
 
-function displayStudents(){
-    // Header row thavira ellam delete pannu
-    while(table.rows.length > 1){
-        table.deleteRow(1);
-    }
+function calculateRank(marks) {
+  if (marks >= 90) return "A+";
+  else if (marks >= 75) return "A";
+  else if (marks >= 60) return "B";
+  else return "C";
+}
 
-    students.forEach((s, i) => {
-        let grade = getGrade(s.marks);
-        let row = table.insertRow();
+// EDIT FEATURE 🔥
+function editStudent(index) {
+  let s = students[index];
 
-        row.insertCell(0).innerHTML = s.name;
-        row.insertCell(1).innerHTML = s.roll;
-        row.insertCell(2).innerHTML = s.marks;
-        row.insertCell(3).innerHTML = `<span class="grade-${grade}">🎖️ ${grade}</span>`;
-        row.insertCell(4).innerHTML =
-            `<button class="edit-btn" onclick="editStudent(${i})">📝 Edit</button>
-             <button class="delete-btn" onclick="deleteStudent(${i})">Delete</button>`;
-    });
+  document.getElementById("name").value = s.name;
+  document.getElementById("roll").value = s.roll;
+  document.getElementById("marks").value = s.marks;
+  document.getElementById("attendance").value = s.attendance;
 
-    totalStudents
+  // remove old record
+  students.splice(index, 1);
+
+  saveData();
+  renderTable();
+}
+
+function deleteStudent(index) {
+  students.splice(index, 1);
+  saveData();
+  renderTable();
+}
+
+function renderTable() {
+  let table = document.getElementById("studentTable");
+  table.innerHTML = "";
+
+  // Sort by marks (highest first)
+  students.sort((a, b) => b.marks - a.marks);
+
+  students.forEach((s, index) => {
+    table.innerHTML += `
+      <tr>
+        <td>${s.name}</td>
+        <td>${s.roll}</td>
+        <td>${s.marks}</td>
+        <td>${s.attendance}%</td>
+        <td>${calculateRank(s.marks)}</td>
+        <td>
+          <button onclick="editStudent(${index})">Edit</button>
+          <button onclick="deleteStudent(${index})">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+      }
