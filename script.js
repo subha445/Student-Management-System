@@ -34,3 +34,18 @@ function deleteStudent(button) {
     let row = button.parentNode.parentNode;
     row.remove();
 }
+function searchStudent() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let name = rows[i].cells[0].innerText.toLowerCase();
+        let roll = rows[i].cells[1].innerText.toLowerCase();
+
+        if (name.includes(input) || roll.includes(input)) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}
