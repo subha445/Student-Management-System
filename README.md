@@ -61,7 +61,7 @@ Student-Management-System/
 
 ## 👨‍💻 Author
 
-- Name: Viswa  
+- Name: Subha
 - GitHub: https://github.com/subha445  
 
 ---
