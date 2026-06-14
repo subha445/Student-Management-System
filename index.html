@@ -6,44 +6,33 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>Student Management System</h1>
+<div class="container">
+    <h1>Student Management System</h1>
 
-        <input type="text" id="name" placeholder="Student Name">
+    <h3 id="totalStudents">Total Students: 0</h3>
 
-        <input type="text" id="roll" placeholder="Roll Number">
+    <input type="text" id="search" placeholder="Search Student..." onkeyup="searchStudent()">
 
-        <input type="number" id="marks" placeholder="Marks">
+    <input type="text" id="name" placeholder="Student Name">
 
-        <button>Add Student</button>
-        <h1>Student Management System</h1>
+    <input type="text" id="roll" placeholder="Roll Number">
 
-<h3 id="totalStudents">Total Students: 0</h3>
+    <input type="number" id="marks" placeholder="Marks">
 
-<input type="text" id="search" placeholder="Search Student..." onkeyup="searchStudent()">
+    <button id="addBtn">Add Student</button>
 
-<input type="text" id="name" placeholder="Student Name">
-<input type="text" id="roll" placeholder="Roll Number">
-<input type="number" id="marks" placeholder="Marks">
+    <table id="studentTable">
+        <tr>
+            <th>Name</th>
+            <th>Roll No</th>
+            <th>Marks</th>
+            <th>Action</th>
+        </tr>
+    </table>
 
-<button>Add Student</button>
+</div>
 
-<table>
-...
-</table>
-
-        <table>
-  <tr>
-    <th>Name</th>
-    <th>Roll No</th>
-    <th>Marks</th>
-    <th>Action</th>
-  </tr>
-        </table>
-
-    </div>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
