@@ -101,4 +101,11 @@ td {
 
 tr:hover td {
     background: #1e3a8a;
+}button {
+  margin: 2px;
+  border-radius: 5px;
 }
+
+button:hover {
+  opacity: 0.8;
+    }
