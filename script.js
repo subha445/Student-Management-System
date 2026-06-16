@@ -102,6 +102,11 @@ function saveData() {
   localStorage.setItem("students", JSON.stringify(students));
 }
 function updateDashboard() {
+function updateDashboard() {
+
+  document.getElementById("totalStudents").textContent =
+    students.length;
+
 }
 // 📊 CHART
 function updateChart() {
