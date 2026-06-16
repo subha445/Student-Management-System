@@ -101,7 +101,8 @@ function searchStudent() {
 function saveData() {
   localStorage.setItem("students", JSON.stringify(students));
 }
-
+function updateDashboard() {
+}
 // 📊 CHART
 function updateChart() {
   let ctx = document.getElementById("chart");
