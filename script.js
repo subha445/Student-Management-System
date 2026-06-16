@@ -40,6 +40,14 @@ function rank(marks) {
   else return "C";
 }
 
+// 📊 DASHBOARD
+function updateDashboard() {
+
+  document.getElementById("totalStudents").textContent =
+    students.length;
+
+}
+
 // 🧾 TABLE
 function renderTable(list = students) {
   let table = document.getElementById("studentTable");
@@ -62,6 +70,7 @@ function renderTable(list = students) {
   });
 
   updateChart();
+  updateDashboard();
 }
 
 // ✏️ EDIT
@@ -101,13 +110,7 @@ function searchStudent() {
 function saveData() {
   localStorage.setItem("students", JSON.stringify(students));
 }
-function updateDashboard() {
-function updateDashboard() {
 
-  document.getElementById("totalStudents").textContent =
-    students.length;
-
-}
 // 📊 CHART
 function updateChart() {
   let ctx = document.getElementById("chart");
@@ -133,6 +136,7 @@ function updateChart() {
 // LOAD DATA
 window.onload = function () {
   let data = localStorage.getItem("students");
+
   if (data) {
     students = JSON.parse(data);
     renderTable();
