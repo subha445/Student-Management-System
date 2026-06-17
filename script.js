@@ -39,11 +39,40 @@ function rank(marks) {
   else if (marks >= 60) return "B";
   else return "C";
 }
-function updateDashboard() {
-  console.log("Dashboard Working");
+
+  function updateDashboard() {
 
   document.getElementById("totalStudents").textContent =
     students.length;
+
+  let totalMarks = 0;
+
+  students.forEach(function(student) {
+    totalMarks += student.marks;
+  });
+
+  let averageMarks = 0;
+
+  if (students.length > 0) {
+    averageMarks = (totalMarks / students.length).toFixed(1);
+  }
+
+  document.getElementById("averageMarks").textContent =
+    averageMarks;
+
+  let topStudent = "-";
+  let highestMarks = 0;
+
+  students.forEach(function(student) {
+    if (student.marks > highestMarks) {
+      highestMarks = student.marks;
+      topStudent = student.name;
+    }
+  });
+
+  document.getElementById("topStudent").textContent =
+    topStudent;
+}
 
   let totalMarks = 0;
 
