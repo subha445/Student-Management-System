@@ -1,4 +1,4 @@
-  let students = [];
+let students = [];
 let chart;
 
 // LOGIN
@@ -21,16 +21,16 @@ let roll = document.getElementById("roll").value;
 let marks = Number(document.getElementById("marks").value);
 let attendance = Number(document.getElementById("attendance").value);
 
-if (!name || !roll || !marks) {
+if (name === "" || roll === "" || marks === 0) {
 alert("Fill all fields");
 return;
 }
 
 students.push({
-name,
-roll,
-marks,
-attendance
+name: name,
+roll: roll,
+marks: marks,
+attendance: attendance
 });
 
 saveData();
@@ -56,23 +56,24 @@ document.getElementById("totalStudents").textContent = students.length;
 
 let totalMarks = 0;
 
-students.forEach(student => {
+students.forEach(function(student) {
 totalMarks += student.marks;
 });
 
-let averageMarks =
-students.length > 0
-? (totalMarks / students.length).toFixed(1)
-: 0;
+let average = 0;
 
-document.getElementById("averageMarks").textContent = averageMarks;
+if (students.length > 0) {
+average = (totalMarks / students.length).toFixed(1);
+}
+
+document.getElementById("averageMarks").textContent = average;
 
 let topStudent = "-";
-let highestMarks = 0;
+let highest = 0;
 
-students.forEach(student => {
-if (student.marks > highestMarks) {
-highestMarks = student.marks;
+students.forEach(function(student) {
+if (student.marks > highest) {
+highest = student.marks;
 topStudent = student.name;
 }
 });
@@ -85,7 +86,7 @@ function renderTable(list = students) {
 let table = document.getElementById("studentTable");
 table.innerHTML = "";
 
-list.forEach((s, i) => {
+list.forEach(function(s, i) {
 table.innerHTML += "<tr> <td>${s.name}</td> <td>${s.roll}</td> <td>${s.marks}</td> <td>${s.attendance}%</td> <td>${rank(s.marks)}</td> <td> <button onclick="editStudent(${i})">Edit</button> <button onclick="deleteStudent(${i})">Delete</button> </td> </tr>";
 });
 
@@ -120,10 +121,12 @@ renderTable();
 function searchStudent() {
 let val = document.getElementById("search").value.toLowerCase();
 
-let filtered = students.filter(student =>
+let filtered = students.filter(function(student) {
+return (
 student.name.toLowerCase().includes(val) ||
 student.roll.toString().includes(val)
 );
+});
 
 renderTable(filtered);
 }
@@ -137,8 +140,13 @@ localStorage.setItem("students", JSON.stringify(students));
 function updateChart() {
 let ctx = document.getElementById("chart");
 
-let labels = students.map(s => s.name);
-let marks = students.map(s => s.marks);
+let labels = students.map(function(s) {
+return s.name;
+});
+
+let marks = students.map(function(s) {
+return s.marks;
+});
 
 if (chart) {
 chart.destroy();
@@ -158,7 +166,7 @@ backgroundColor: "blue"
 }
 
 // LOAD DATA
-window.onload = function () {
+window.onload = function() {
 let data = localStorage.getItem("students");
 
 if (data) {
