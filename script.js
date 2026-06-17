@@ -1,200 +1,168 @@
-let students = [];
+  let students = [];
 let chart;
 
-// 🔐 LOGIN
+// LOGIN
 function login() {
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
+let u = document.getElementById("user").value;
+let p = document.getElementById("pass").value;
 
-  if (u === "admin" && p === "1234") {
-    document.getElementById("loginPage").style.display = "none";
-    document.getElementById("app").style.display = "block";
-  } else {
-    alert("Wrong login");
-  }
+if (u === "admin" && p === "1234") {
+document.getElementById("loginPage").style.display = "none";
+document.getElementById("app").style.display = "block";
+} else {
+alert("Wrong login");
+}
 }
 
-// ➕ ADD
+// ADD STUDENT
 function addStudent() {
-  let name = document.getElementById("name").value;
-  let roll = document.getElementById("roll").value;
-  let marks = document.getElementById("marks").value;
-  let attendance = document.getElementById("attendance").value;
+let name = document.getElementById("name").value;
+let roll = document.getElementById("roll").value;
+let marks = Number(document.getElementById("marks").value);
+let attendance = Number(document.getElementById("attendance").value);
 
-  students.push({
-    name,
-    roll,
-    marks: Number(marks),
-    attendance: Number(attendance)
-  });
-
-  saveData();
-  renderTable();
+if (!name || !roll || !marks) {
+alert("Fill all fields");
+return;
 }
 
-// 🧠 RANK
+students.push({
+name,
+roll,
+marks,
+attendance
+});
+
+saveData();
+renderTable();
+
+document.getElementById("name").value = "";
+document.getElementById("roll").value = "";
+document.getElementById("marks").value = "";
+document.getElementById("attendance").value = "";
+}
+
+// RANK
 function rank(marks) {
-  if (marks >= 90) return "A+";
-  else if (marks >= 75) return "A";
-  else if (marks >= 60) return "B";
-  else return "C";
+if (marks >= 90) return "A+";
+if (marks >= 75) return "A";
+if (marks >= 60) return "B";
+return "C";
 }
 
-  function updateDashboard() {
+// DASHBOARD
+function updateDashboard() {
+document.getElementById("totalStudents").textContent = students.length;
 
-  document.getElementById("totalStudents").textContent =
-    students.length;
+let totalMarks = 0;
 
-  let totalMarks = 0;
+students.forEach(student => {
+totalMarks += student.marks;
+});
 
-  students.forEach(function(student) {
-    totalMarks += student.marks;
-  });
+let averageMarks =
+students.length > 0
+? (totalMarks / students.length).toFixed(1)
+: 0;
 
-  let averageMarks = 0;
+document.getElementById("averageMarks").textContent = averageMarks;
 
-  if (students.length > 0) {
-    averageMarks = (totalMarks / students.length).toFixed(1);
-  }
+let topStudent = "-";
+let highestMarks = 0;
 
-  document.getElementById("averageMarks").textContent =
-    averageMarks;
+students.forEach(student => {
+if (student.marks > highestMarks) {
+highestMarks = student.marks;
+topStudent = student.name;
+}
+});
 
-  let topStudent = "-";
-  let highestMarks = 0;
-
-  students.forEach(function(student) {
-    if (student.marks > highestMarks) {
-      highestMarks = student.marks;
-      topStudent = student.name;
-    }
-  });
-
-  document.getElementById("topStudent").textContent =
-    topStudent;
+document.getElementById("topStudent").textContent = topStudent;
 }
 
-  let totalMarks = 0;
-
-  students.forEach(function(student) {
-    totalMarks += student.marks;
-  });
-
-  let averageMarks = 0;
-
-  if (students.length > 0) {
-    averageMarks = (totalMarks / students.length).toFixed(1);
-  }
-
-  document.getElementById("averageMarks").textContent =
-    averageMarks;
-
-  let topStudent = "-";
-  let highestMarks = 0;
-
-  students.forEach(function(student) {
-    if (student.marks > highestMarks) {
-      highestMarks = student.marks;
-      topStudent = student.name;
-    }
-  });
-
-  document.getElementById("topStudent").textContent =
-    topStudent;
-}
-
-
-// 🧾 TABLE
+// TABLE
 function renderTable(list = students) {
-  let table = document.getElementById("studentTable");
-  table.innerHTML = "";
+let table = document.getElementById("studentTable");
+table.innerHTML = "";
 
-  list.forEach((s, i) => {
-    table.innerHTML += `
-      <tr>
-        <td>${s.name}</td>
-        <td>${s.roll}</td>
-        <td>${s.marks}</td>
-        <td>${s.attendance}%</td>
-        <td>${rank(s.marks)}</td>
-        <td>
-          <button onclick="editStudent(${i})">Edit</button>
-          <button onclick="deleteStudent(${i})">Delete</button>
-        </td>
-      </tr>
-    `;
-  });
+list.forEach((s, i) => {
+table.innerHTML += "<tr> <td>${s.name}</td> <td>${s.roll}</td> <td>${s.marks}</td> <td>${s.attendance}%</td> <td>${rank(s.marks)}</td> <td> <button onclick="editStudent(${i})">Edit</button> <button onclick="deleteStudent(${i})">Delete</button> </td> </tr>";
+});
 
-  updateChart();
-  updateDashboard();
+updateDashboard();
+updateChart();
 }
 
-// ✏️ EDIT
+// EDIT
 function editStudent(i) {
-  let s = students[i];
+let s = students[i];
 
-  document.getElementById("name").value = s.name;
-  document.getElementById("roll").value = s.roll;
-  document.getElementById("marks").value = s.marks;
-  document.getElementById("attendance").value = s.attendance;
+document.getElementById("name").value = s.name;
+document.getElementById("roll").value = s.roll;
+document.getElementById("marks").value = s.marks;
+document.getElementById("attendance").value = s.attendance;
 
-  students.splice(i, 1);
-  saveData();
-  renderTable();
+students.splice(i, 1);
+
+saveData();
+renderTable();
 }
 
-// ❌ DELETE
+// DELETE
 function deleteStudent(i) {
-  students.splice(i, 1);
-  saveData();
-  renderTable();
+students.splice(i, 1);
+
+saveData();
+renderTable();
 }
 
-// 🔍 SEARCH
+// SEARCH
 function searchStudent() {
-  let val = document.getElementById("search").value.toLowerCase();
+let val = document.getElementById("search").value.toLowerCase();
 
-  let filtered = students.filter(s =>
-    s.name.toLowerCase().includes(val) ||
-    s.roll.toString().includes(val)
-  );
+let filtered = students.filter(student =>
+student.name.toLowerCase().includes(val) ||
+student.roll.toString().includes(val)
+);
 
-  renderTable(filtered);
+renderTable(filtered);
 }
 
-// 💾 LOCAL STORAGE
+// SAVE
 function saveData() {
-  localStorage.setItem("students", JSON.stringify(students));
+localStorage.setItem("students", JSON.stringify(students));
 }
 
-// 📊 CHART
+// CHART
 function updateChart() {
-  let ctx = document.getElementById("chart");
+let ctx = document.getElementById("chart");
 
-  let labels = students.map(s => s.name);
-  let marks = students.map(s => s.marks);
+let labels = students.map(s => s.name);
+let marks = students.map(s => s.marks);
 
-  if (chart) chart.destroy();
+if (chart) {
+chart.destroy();
+}
 
-  chart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [{
-        label: "Marks",
-        data: marks,
-        backgroundColor: "blue"
-      }]
-    }
-  });
+chart = new Chart(ctx, {
+type: "bar",
+data: {
+labels: labels,
+datasets: [{
+label: "Marks",
+data: marks,
+backgroundColor: "blue"
+}]
+}
+});
 }
 
 // LOAD DATA
 window.onload = function () {
-  let data = localStorage.getItem("students");
+let data = localStorage.getItem("students");
 
-  if (data) {
-    students = JSON.parse(data);
-    renderTable();
-  }
+if (data) {
+students = JSON.parse(data);
+renderTable();
+}
 };
