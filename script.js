@@ -40,6 +40,7 @@ function rank(marks) {
   else return "C";
 }
 function updateDashboard() {
+  console.log("Dashboard Working");
 
   document.getElementById("totalStudents").textContent =
     students.length;
