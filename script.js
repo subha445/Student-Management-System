@@ -1,3 +1,8 @@
+window.onload = function() {
+  document.getElementById("loginPage").style.display = "block";
+  document.getElementById("app").style.display = "none";
+}
+
 function login() {
   let u = document.getElementById("user").value;
   let p = document.getElementById("pass").value;
@@ -8,9 +13,4 @@ function login() {
   } else {
     alert("Wrong Username or Password");
   }
-}
-
-window.onload = function() {
-  document.getElementById("loginPage").style.display = "block";
-  document.getElementById("app").style.display = "none";
 }
