@@ -1,178 +1,413 @@
-let students = [];
-let chart = null;
+let students =
+    JSON.parse(localStorage.getItem("students")) || [];
 
-// LOGIN
-window.onload = function () {
-  document.getElementById("loginPage").style.display = "block";
-  document.getElementById("app").style.display = "none";
+let editIndex = -1;
 
-  let data = localStorage.getItem("students");
-  if (data) {
-    students = JSON.parse(data);
-  }
-};
+const form =
+    document.getElementById("studentForm");
 
-function login() {
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
+const table =
+    document.getElementById("studentTable");
 
-  if (u === "admin" && p === "1234") {
-    document.getElementById("loginPage").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    renderTable();
-  } else {
-    alert("Wrong Username or Password");
-  }
+
+/* ADD STUDENT */
+
+form.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const name =
+        document.getElementById("name").value.trim();
+
+    const roll =
+        document.getElementById("roll").value.trim();
+
+    const marks =
+        Number(document.getElementById("marks").value);
+
+
+    if (marks < 0 || marks > 500) {
+
+        alert("Marks must be between 0 and 500");
+
+        return;
+    }
+
+
+    const student = {
+
+        name: name,
+
+        roll: roll,
+
+        marks: marks
+
+    };
+
+
+    if (editIndex === -1) {
+
+        students.push(student);
+
+    } else {
+
+        students[editIndex] = student;
+
+        editIndex = -1;
+
+        document.querySelector(".add-btn").textContent =
+            "Add Student";
+    }
+
+
+    saveData();
+
+    form.reset();
+
+    displayStudents();
+
+});
+
+
+/* DISPLAY STUDENTS */
+
+function displayStudents(data = students) {
+
+    table.innerHTML = "";
+
+
+    data.forEach((student, index) => {
+
+        const percentage =
+            ((student.marks / 500) * 100).toFixed(1);
+
+
+        const grade =
+            getGrade(percentage);
+
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>${student.name}</td>
+
+            <td>${student.roll}</td>
+
+            <td>${student.marks}/500</td>
+
+            <td>${percentage}%</td>
+
+            <td>${grade}</td>
+
+            <td>
+
+                <button
+                    class="edit-btn"
+                    onclick="editStudent(${index})">
+
+                    ✏️ Edit
+
+                </button>
+
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteStudent(${index})">
+
+                    🗑️ Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+
+    updateDashboard();
+
 }
 
-// ADD STUDENT
-function addStudent() {
-  let name = document.getElementById("name").value;
-  let roll = document.getElementById("roll").value;
-  let marks = document.getElementById("marks").value;
-  let attendance = document.getElementById("attendance").value;
 
-  if (!name || !roll || !marks || !attendance) {
-    alert("Fill all fields");
-    return;
-  }
+/* GRADE */
 
-  students.push({
-    name: name,
-    roll: roll,
-    marks: Number(marks),
-    attendance: Number(attendance)
-  });
+function getGrade(percentage) {
 
-  saveData();
-  renderTable();
+    if (percentage >= 90)
+        return "A+";
 
-  document.getElementById("name").value = "";
-  document.getElementById("roll").value = "";
-  document.getElementById("marks").value = "";
-  document.getElementById("attendance").value = "";
+    if (percentage >= 80)
+        return "A";
+
+    if (percentage >= 70)
+        return "B";
+
+    if (percentage >= 60)
+        return "C";
+
+    if (percentage >= 50)
+        return "D";
+
+    return "F";
 }
 
-// RANK
-function rank(marks) {
-  if (marks >= 90) return "A+";
-  if (marks >= 75) return "A";
-  if (marks >= 60) return "B";
-  return "C";
+
+/* DELETE */
+
+function deleteStudent(index) {
+
+    if (confirm("Delete this student?")) {
+
+        students.splice(index, 1);
+
+        saveData();
+
+        displayStudents();
+
+    }
+
 }
 
-// DASHBOARD
+
+/* EDIT */
+
+function editStudent(index) {
+
+    const student =
+        students[index];
+
+
+    document.getElementById("name").value =
+        student.name;
+
+    document.getElementById("roll").value =
+        student.roll;
+
+    document.getElementById("marks").value =
+        student.marks;
+
+
+    editIndex = index;
+
+
+    document.querySelector(".add-btn").textContent =
+        "Update Student";
+
+
+    document
+        .getElementById("addStudent")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* SEARCH */
+
+function searchStudents() {
+
+    const search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+
+    const filtered =
+        students.filter(student =>
+
+            student.name
+                .toLowerCase()
+                .includes(search)
+
+            ||
+
+            student.roll
+                .toLowerCase()
+                .includes(search)
+
+        );
+
+
+    displayStudents(filtered);
+
+}
+
+
+/* DASHBOARD */
+
 function updateDashboard() {
-  document.getElementById("totalStudents").textContent = students.length;
 
-  let total = 0;
-  students.forEach(s => total += s.marks);
+    document.getElementById("totalStudents")
+        .textContent = students.length;
 
-  let avg = students.length
-    ? (total / students.length).toFixed(1)
-    : 0;
 
-  document.getElementById("averageMarks").textContent = avg;
+    if (students.length === 0) {
 
-  let top = "-";
-  let highest = -1;
+        document.getElementById("averageMarks")
+            .textContent = "0";
 
-  students.forEach(s => {
-    if (s.marks > highest) {
-      highest = s.marks;
-      top = s.name;
+        document.getElementById("highestMark")
+            .textContent = "0";
+
+        updateChart();
+
+        return;
     }
-  });
 
-  document.getElementById("topStudent").textContent = top;
+
+    const total =
+        students.reduce(
+            (sum, student) =>
+                sum + student.marks,
+            0
+        );
+
+
+    const average =
+        total / students.length;
+
+
+    const highest =
+        Math.max(
+            ...students.map(
+                student => student.marks
+            )
+        );
+
+
+    document.getElementById("averageMarks")
+        .textContent =
+        average.toFixed(1);
+
+
+    document.getElementById("highestMark")
+        .textContent =
+        highest;
+
+
+    updateChart();
+
 }
 
-// TABLE
-function renderTable(list = students) {
-  const table = document.getElementById("studentTable");
-  table.innerHTML = "";
 
-  list.forEach((s, i) => {
-    table.innerHTML += `
-      <tr>
-        <td>${s.name}</td>
-        <td>${s.roll}</td>
-        <td>${s.marks}</td>
-        <td>${s.attendance}%</td>
-        <td>${rank(s.marks)}</td>
-        <td>
-          <button onclick="editStudent(${i})">Edit</button>
-          <button onclick="deleteStudent(${i})">Delete</button>
-        </td>
-      </tr>
-    `;
-  });
+/* SAVE DATA */
 
-  updateDashboard();
-  updateChart();
-}
-
-// EDIT
-function editStudent(i) {
-  let s = students[i];
-
-  document.getElementById("name").value = s.name;
-  document.getElementById("roll").value = s.roll;
-  document.getElementById("marks").value = s.marks;
-  document.getElementById("attendance").value = s.attendance;
-
-  students.splice(i, 1);
-
-  saveData();
-  renderTable();
-}
-
-// DELETE
-function deleteStudent(i) {
-  students.splice(i, 1);
-  saveData();
-  renderTable();
-}
-
-// SEARCH
-function searchStudent() {
-  let value = document.getElementById("search").value.toLowerCase();
-
-  let filtered = students.filter(s =>
-    s.name.toLowerCase().includes(value) ||
-    s.roll.toString().includes(value)
-  );
-
-  renderTable(filtered);
-}
-
-// SAVE
 function saveData() {
-  localStorage.setItem("students", JSON.stringify(students));
+
+    localStorage.setItem(
+        "students",
+        JSON.stringify(students)
+    );
+
 }
 
-// CHART
+
+/* DARK MODE */
+
+function toggleTheme() {
+
+    document.body.classList.toggle("dark");
+
+
+    const button =
+        document.getElementById("themeBtn");
+
+
+    if (document.body.classList.contains("dark")) {
+
+        button.textContent =
+            "☀️ Light Mode";
+
+    } else {
+
+        button.textContent =
+            "🌙 Dark Mode";
+
+    }
+
+}
+
+
+/* CHART */
+
+let marksChart;
+
+
 function updateChart() {
-  const ctx = document.getElementById("chart");
 
-  if (!ctx) return;
+    const canvas =
+        document.getElementById("marksChart");
 
-  let labels = students.map(s => s.name);
-  let marks = students.map(s => s.marks);
 
-  if (chart) {
-    chart.destroy();
-  }
+    const labels =
+        students.map(
+            student => student.name
+        );
 
-  chart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [{
-        label: "Marks",
-        data: marks,
-        backgroundColor: "blue"
-      }]
+
+    const marks =
+        students.map(
+            student => student.marks
+        );
+
+
+    if (marksChart) {
+
+        marksChart.destroy();
+
     }
-  });
-    }
+
+
+    marksChart = new Chart(canvas, {
+
+        type: "bar",
+
+        data: {
+
+            labels: labels,
+
+            datasets: [{
+
+                label: "Marks",
+
+                data: marks
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    max: 500
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+/* INITIAL LOAD */
+
+displayStudents();
