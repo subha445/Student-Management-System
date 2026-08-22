@@ -1,72 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Student Management System</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN -->
-<div id="loginPage">
-  <h2>Login</h2>
-  <input type="text" id="user" placeholder="Username">
-  <input type="password" id="pass" placeholder="Password">
-  <button onclick="login()">Login</button>
-</div>
+<div class="app">
 
-<!-- 📚 APP -->
-<div id="app" style="display:none;">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-  <h1>Student Management System</h1>
-  <div class="dashboard">
+        <h2>🎓 Student<span>Hub</span></h2>
 
-  <div class="card">
-    <h3>Total Students</h3>
-    <p id="totalStudents">0</p>
-  </div>
+        <nav>
+            <a href="#dashboard">📊 Dashboard</a>
+            <a href="#students">👨‍🎓 Students</a>
+            <a href="#addStudent">➕ Add Student</a>
+        </nav>
 
-  <div class="card">
-    <h3>Average Marks</h3>
-    <p id="averageMarks">0</p>
-  </div>
+        <button id="themeBtn" onclick="toggleTheme()">
+            🌙 Dark Mode
+        </button>
 
-  <div class="card">
-    <h3>Top Student</h3>
-    <p id="topStudent">-</p>
-  </div>
+    </aside>
 
-  </div>
 
-  <input type="text" id="name" placeholder="Name">
-  <input type="number" id="roll" placeholder="Roll">
-  <input type="number" id="marks" placeholder="Marks">
-  <input type="number" id="attendance" placeholder="Attendance">
-  <button onclick="addStudent()">Add</button>
+    <!-- MAIN -->
+    <main class="main">
 
-  <input type="text" id="search" placeholder="Search..." onkeyup="searchStudent()">
+        <!-- HEADER -->
+        <header>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Roll</th>
-        <th>Marks</th>
-        <th>Attendance</th>
-        <th>Rank</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody id="studentTable"></tbody>
-  </table>
+            <div>
+                <h1>Student Management System</h1>
+                <p>Manage your students easily 🚀</p>
+            </div>
 
-  <h2>📊 Chart</h2>
-  <canvas id="chart"></canvas>
+            <div class="profile">
+                👤 Admin
+            </div>
 
-</div>
+        </header>
 
-<script src="script.js"></script>
-</body>
-    </html>
+
+        <!-- DASHBOARD -->
+        <section id="dashboard">
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div>
+                        <p>Total Students</p>
+                        <h2 id="totalStudents">0</h2>
+                    </div>
+
+                    <span>👨‍🎓</span>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div>
+                        <p>Average Marks</p>
+                        <h2 id="averageMarks">0</h2>
+                    </div>
+
+                    <span>📈</span>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div>
+                        <p>Highest Mark</p>
+                        <h2 id="highestMark">0</h2>
+                    </div>
+
+                    <span>🏆</span>
+
+                </div>
