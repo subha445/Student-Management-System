@@ -14,7 +14,41 @@
 
 <body>
 
-<div class="app">
+<!-- ADMIN LOGIN -->
+<div id="loginScreen" class="login-screen">
+
+    <div class="login-box">
+
+        <div class="login-icon">🔐</div>
+
+        <h1>StudentHub</h1>
+
+        <p>Admin Login</p>
+
+        <input
+            type="text"
+            id="loginUsername"
+            placeholder="Username"
+        >
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+        >
+
+        <button onclick="loginAdmin()">
+            Login
+        </button>
+
+        <small id="loginError"></small>
+
+    </div>
+
+</div>
+
+
+<div class="app" id="app">
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
