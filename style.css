@@ -5,6 +5,10 @@
     font-family: Arial, sans-serif;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background: #f4f7fb;
     color: #1f2937;
@@ -16,8 +20,7 @@ body {
     min-height: 100vh;
 }
 
-
-/* SIDEBAR */
+/* ================= SIDEBAR ================= */
 
 .sidebar {
     width: 240px;
@@ -25,12 +28,15 @@ body {
     color: white;
     padding: 25px 18px;
     position: fixed;
+    left: 0;
+    top: 0;
     height: 100vh;
+    z-index: 100;
 }
 
 .sidebar h2 {
-    margin-bottom: 40px;
-    font-size: 23px;
+    margin-bottom: 35px;
+    font-size: 24px;
 }
 
 .sidebar h2 span {
@@ -40,7 +46,7 @@ body {
 .sidebar nav {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .sidebar nav a {
@@ -49,6 +55,7 @@ body {
     padding: 13px;
     border-radius: 10px;
     transition: 0.3s;
+    display: block;
 }
 
 .sidebar nav a:hover {
@@ -57,16 +64,16 @@ body {
 }
 
 #themeBtn {
-    margin-top: 40px;
+    margin-top: 35px;
     width: 100%;
     padding: 12px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    font-size: 15px;
 }
 
-
-/* MAIN */
+/* ================= MAIN ================= */
 
 .main {
     margin-left: 240px;
@@ -82,12 +89,12 @@ header {
 }
 
 header h1 {
-    font-size: 28px;
+    font-size: 30px;
 }
 
 header p {
     color: #6b7280;
-    margin-top: 5px;
+    margin-top: 6px;
 }
 
 .profile {
@@ -97,8 +104,7 @@ header p {
     box-shadow: 0 3px 12px rgba(0,0,0,0.08);
 }
 
-
-/* CARDS */
+/* ================= CARDS ================= */
 
 .cards {
     display: grid;
@@ -110,6 +116,7 @@ header p {
 .card {
     background: white;
     padding: 25px;
+    min-height: 130px;
     border-radius: 16px;
 
     display: flex;
@@ -117,7 +124,6 @@ header p {
     align-items: center;
 
     box-shadow: 0 5px 20px rgba(0,0,0,0.07);
-
     transition: 0.3s;
 }
 
@@ -127,6 +133,7 @@ header p {
 
 .card p {
     color: #6b7280;
+    font-size: 16px;
 }
 
 .card h2 {
@@ -138,8 +145,7 @@ header p {
     font-size: 35px;
 }
 
-
-/* CHART */
+/* ================= CHART ================= */
 
 .chart-box {
     background: white;
@@ -154,8 +160,11 @@ header p {
     margin-bottom: 20px;
 }
 
+#marksChart {
+    max-height: 400px;
+}
 
-/* STUDENTS */
+/* ================= SECTIONS ================= */
 
 .students-section,
 .form-section {
@@ -171,6 +180,7 @@ header p {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
     margin-bottom: 20px;
 }
 
@@ -180,24 +190,26 @@ header p {
 }
 
 #searchInput {
-    padding: 12px;
-    width: 250px;
+    padding: 12px 15px;
+    width: 280px;
 
     border: 1px solid #ddd;
     border-radius: 10px;
 
     outline: none;
+    font-size: 14px;
 }
 
-
-/* TABLE */
+/* ================= TABLE ================= */
 
 .table-container {
+    width: 100%;
     overflow-x: auto;
 }
 
 table {
     width: 100%;
+    min-width: 650px;
     border-collapse: collapse;
 }
 
@@ -205,7 +217,6 @@ th,
 td {
     padding: 14px;
     text-align: left;
-
     border-bottom: 1px solid #eee;
 }
 
@@ -217,20 +228,16 @@ tr:hover {
     background: #f8fafc;
 }
 
-
-/* BUTTONS */
+/* ================= BUTTONS ================= */
 
 .edit-btn,
 .delete-btn {
     border: none;
-
     padding: 8px 12px;
-
     border-radius: 7px;
-
     cursor: pointer;
-
     margin-right: 5px;
+    font-size: 13px;
 }
 
 .edit-btn {
@@ -243,55 +250,55 @@ tr:hover {
     color: #dc2626;
 }
 
-.add-btn {
-    background: linear-gradient(90deg, #2563eb, #7c3aed);
-
-    color: white;
-
-    border: none;
-
-    padding: 13px 25px;
-
-    border-radius: 10px;
-
-    cursor: pointer;
-
-    font-size: 16px;
+.edit-btn:hover,
+.delete-btn:hover {
+    opacity: 0.8;
 }
 
+.add-btn {
+    background: linear-gradient(90deg, #2563eb, #7c3aed);
+    color: white;
+    border: none;
+    padding: 13px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
 
-/* FORM */
+.add-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ================= FORM ================= */
 
 form {
     display: grid;
-
     grid-template-columns: repeat(3, 1fr);
-
     gap: 20px;
-
     align-items: end;
 }
 
 .input-group {
     display: flex;
-
     flex-direction: column;
-
     gap: 8px;
+}
+
+.input-group label {
+    font-weight: 600;
+    font-size: 14px;
 }
 
 .input-group input {
     padding: 13px;
-
     border: 1px solid #ddd;
-
     border-radius: 9px;
-
     outline: none;
+    font-size: 14px;
 }
 
-
-/* DARK MODE */
+/* ================= DARK MODE ================= */
 
 body.dark {
     background: #111827;
@@ -320,19 +327,24 @@ body.dark input {
     border-color: #4b5563;
 }
 
+body.dark .section-title p,
+body.dark header p,
+body.dark .card p {
+    color: #9ca3af;
+}
 
-/* TABLET */
+/* ================= TABLET ================= */
 
 @media (max-width: 900px) {
 
     .sidebar {
-        width: 190px;
+        width: 200px;
     }
 
     .main {
-        margin-left: 190px;
-
-        width: calc(100% - 190px);
+        margin-left: 200px;
+        width: calc(100% - 200px);
+        padding: 20px;
     }
 
     .cards {
@@ -344,48 +356,133 @@ body.dark input {
     }
 }
 
-
-/* MOBILE */
+/* ================= MOBILE ================= */
 
 @media (max-width: 600px) {
 
+    .app {
+        display: block;
+    }
+
+    /* Compact mobile sidebar */
+
     .sidebar {
         position: relative;
-
         width: 100%;
-
         height: auto;
+
+        padding: 16px 14px;
+
+        text-align: center;
     }
 
-    .app {
-        flex-direction: column;
+    .sidebar h2 {
+        font-size: 22px;
+        margin-bottom: 15px;
     }
+
+    .sidebar nav {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+
+    .sidebar nav a {
+        padding: 9px 4px;
+        font-size: 12px;
+    }
+
+    .sidebar nav a:hover {
+        transform: none;
+    }
+
+    #themeBtn {
+        margin-top: 12px;
+        padding: 9px;
+        font-size: 13px;
+    }
+
+    /* Main */
 
     .main {
         margin-left: 0;
-
         width: 100%;
-
         padding: 15px;
     }
 
     header {
         flex-direction: column;
-
         align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
 
-        gap: 15px;
+    header h1 {
+        font-size: 27px;
+        line-height: 1.2;
+    }
+
+    header p {
+        font-size: 15px;
+    }
+
+    .profile {
+        padding: 10px 16px;
+    }
+
+    /* Cards */
+
+    .cards {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .card {
+        min-height: 110px;
+        padding: 20px;
+    }
+
+    .card h2 {
+        font-size: 28px;
+    }
+
+    .card span {
+        font-size: 30px;
+    }
+
+    /* Sections */
+
+    .students-section,
+    .form-section,
+    .chart-box {
+        padding: 18px;
+        border-radius: 14px;
     }
 
     .section-title {
         flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 15px;
+        align-items: stretch;
     }
 
     #searchInput {
         width: 100%;
     }
-      }
+
+    /* Form */
+
+    form {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .add-btn {
+        width: 100%;
+    }
+
+    /* Chart */
+
+    #marksChart {
+        max-height: 300px;
+    }
+
+    }
