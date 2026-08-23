@@ -449,3 +449,89 @@ function updateChart() {
 /* ================= INITIAL LOAD ================= */
 
 displayStudents();
+/* ================= ADMIN LOGIN ================= */
+
+function loginAdmin() {
+
+    const username =
+        document.getElementById("loginUsername").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    const error =
+        document.getElementById("loginError");
+
+
+    // Demo login
+    if (username === "admin" && password === "1234") {
+
+        document.getElementById("loginScreen").style.display =
+            "none";
+
+        document.getElementById("app").style.display =
+            "flex";
+
+        sessionStorage.setItem(
+            "adminLoggedIn",
+            "true"
+        );
+
+        error.textContent = "";
+
+    } else {
+
+        error.textContent =
+            "❌ Invalid username or password";
+
+    }
+
+}
+
+
+/* CHECK LOGIN */
+
+function checkLogin() {
+
+    const loggedIn =
+        sessionStorage.getItem("adminLoggedIn");
+
+
+    if (loggedIn === "true") {
+
+        document.getElementById("loginScreen").style.display =
+            "none";
+
+        document.getElementById("app").style.display =
+            "flex";
+
+    } else {
+
+        document.getElementById("loginScreen").style.display =
+            "flex";
+
+        document.getElementById("app").style.display =
+            "none";
+
+    }
+
+}
+
+
+/* ENTER KEY LOGIN */
+
+document.addEventListener("keydown", function(event) {
+
+    if (
+        event.key === "Enter" &&
+        document.getElementById("loginScreen").style.display !== "none"
+    ) {
+
+        loginAdmin();
+
+    }
+
+});
+
+
+checkLogin();
