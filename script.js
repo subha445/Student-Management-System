@@ -3,16 +3,13 @@ let students =
 
 let editIndex = -1;
 
-const form =
-    document.getElementById("studentForm");
-
-const table =
-    document.getElementById("studentTable");
+const form = document.getElementById("studentForm");
+const table = document.getElementById("studentTable");
 
 
-/* ADD STUDENT */
+/* ================= ADD / UPDATE STUDENT ================= */
 
-form.addEventListener("submit", function(event) {
+form.addEventListener("submit", function (event) {
 
     event.preventDefault();
 
@@ -26,22 +23,22 @@ form.addEventListener("submit", function(event) {
         Number(document.getElementById("marks").value);
 
 
+    if (!name || !roll) {
+        alert("Please enter name and roll number.");
+        return;
+    }
+
+
     if (marks < 0 || marks > 500) {
-
-        alert("Marks must be between 0 and 500");
-
+        alert("Marks must be between 0 and 500.");
         return;
     }
 
 
     const student = {
-
         name: name,
-
         roll: roll,
-
         marks: marks
-
     };
 
 
@@ -69,21 +66,25 @@ form.addEventListener("submit", function(event) {
 });
 
 
-/* DISPLAY STUDENTS */
+/* ================= DISPLAY STUDENTS ================= */
 
 function displayStudents(data = students) {
 
     table.innerHTML = "";
 
 
-    data.forEach((student, index) => {
+    data.forEach((student) => {
+
+        const realIndex =
+            students.indexOf(student);
+
 
         const percentage =
             ((student.marks / 500) * 100).toFixed(1);
 
 
         const grade =
-            getGrade(percentage);
+            getGrade(Number(percentage));
 
 
         const row =
@@ -106,7 +107,7 @@ function displayStudents(data = students) {
 
                 <button
                     class="edit-btn"
-                    onclick="editStudent(${index})">
+                    onclick="editStudent(${realIndex})">
 
                     ✏️ Edit
 
@@ -115,7 +116,7 @@ function displayStudents(data = students) {
 
                 <button
                     class="delete-btn"
-                    onclick="deleteStudent(${index})">
+                    onclick="deleteStudent(${realIndex})">
 
                     🗑️ Delete
 
@@ -136,7 +137,7 @@ function displayStudents(data = students) {
 }
 
 
-/* GRADE */
+/* ================= GRADE ================= */
 
 function getGrade(percentage) {
 
@@ -159,11 +160,22 @@ function getGrade(percentage) {
 }
 
 
-/* DELETE */
+/* ================= DELETE ================= */
 
 function deleteStudent(index) {
 
-    if (confirm("Delete this student?")) {
+    if (!students[index]) return;
+
+
+    const student =
+        students[index];
+
+
+    if (
+        confirm(
+            `Delete ${student.name}?`
+        )
+    ) {
 
         students.splice(index, 1);
 
@@ -176,9 +188,12 @@ function deleteStudent(index) {
 }
 
 
-/* EDIT */
+/* ================= EDIT ================= */
 
 function editStudent(index) {
+
+    if (!students[index]) return;
+
 
     const student =
         students[index];
@@ -187,8 +202,10 @@ function editStudent(index) {
     document.getElementById("name").value =
         student.name;
 
+
     document.getElementById("roll").value =
         student.roll;
+
 
     document.getElementById("marks").value =
         student.marks;
@@ -210,7 +227,7 @@ function editStudent(index) {
 }
 
 
-/* SEARCH */
+/* ================= SEARCH ================= */
 
 function searchStudents() {
 
@@ -218,7 +235,17 @@ function searchStudents() {
         document
         .getElementById("searchInput")
         .value
-        .toLowerCase();
+        .toLowerCase()
+        .trim();
+
+
+    if (search === "") {
+
+        displayStudents();
+
+        return;
+
+    }
 
 
     const filtered =
@@ -242,7 +269,7 @@ function searchStudents() {
 }
 
 
-/* DASHBOARD */
+/* ================= DASHBOARD ================= */
 
 function updateDashboard() {
 
@@ -255,12 +282,15 @@ function updateDashboard() {
         document.getElementById("averageMarks")
             .textContent = "0";
 
+
         document.getElementById("highestMark")
             .textContent = "0";
+
 
         updateChart();
 
         return;
+
     }
 
 
@@ -299,7 +329,7 @@ function updateDashboard() {
 }
 
 
-/* SAVE DATA */
+/* ================= SAVE DATA ================= */
 
 function saveData() {
 
@@ -311,7 +341,7 @@ function saveData() {
 }
 
 
-/* DARK MODE */
+/* ================= DARK MODE ================= */
 
 function toggleTheme() {
 
@@ -322,7 +352,9 @@ function toggleTheme() {
         document.getElementById("themeBtn");
 
 
-    if (document.body.classList.contains("dark")) {
+    if (
+        document.body.classList.contains("dark")
+    ) {
 
         button.textContent =
             "☀️ Light Mode";
@@ -337,15 +369,18 @@ function toggleTheme() {
 }
 
 
-/* CHART */
+/* ================= CHART ================= */
 
-let marksChart;
+let marksChart = null;
 
 
 function updateChart() {
 
     const canvas =
         document.getElementById("marksChart");
+
+
+    if (!canvas) return;
 
 
     const labels =
@@ -385,9 +420,12 @@ function updateChart() {
 
         },
 
+
         options: {
 
             responsive: true,
+
+            maintainAspectRatio: true,
 
             scales: {
 
@@ -408,6 +446,6 @@ function updateChart() {
 }
 
 
-/* INITIAL LOAD */
+/* ================= INITIAL LOAD ================= */
 
 displayStudents();
