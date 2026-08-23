@@ -486,3 +486,122 @@ body.dark .card p {
     }
 
     }
+/* ================= ADMIN LOGIN ================= */
+
+.login-screen {
+    position: fixed;
+    inset: 0;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+
+    padding: 20px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 380px;
+
+    background: white;
+
+    padding: 35px 25px;
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.25);
+}
+
+.login-icon {
+    font-size: 55px;
+    margin-bottom: 10px;
+}
+
+.login-box h1 {
+    color: #2563eb;
+    margin-bottom: 5px;
+}
+
+.login-box p {
+    color: #6b7280;
+    margin-bottom: 25px;
+}
+
+.login-box input {
+    width: 100%;
+
+    padding: 14px;
+
+    margin-bottom: 15px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    font-size: 15px;
+}
+
+.login-box button {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #7c3aed
+    );
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    opacity: 0.9;
+}
+
+#loginError {
+    display: block;
+
+    color: #dc2626;
+
+    margin-top: 15px;
+}
+
+
+/* DARK MODE LOGIN */
+
+body.dark .login-box {
+    background: #1f2937;
+    color: white;
+}
+
+body.dark .login-box p {
+    color: #9ca3af;
+}
+
+body.dark .login-box input {
+    background: #374151;
+    color: white;
+    border-color: #4b5563;
+}
