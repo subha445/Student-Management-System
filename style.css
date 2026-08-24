@@ -358,7 +358,93 @@ body.dark .card p {
 
 /* ================= MOBILE ================= */
 
-@media (max-width: 1000px) {
+/* ================= MOBILE ================= */
+
+@media screen and (max-width: 1000px) {
+
+    .app {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .sidebar {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+
+        padding: 16px 12px !important;
+
+        text-align: center;
+    }
+
+    .sidebar h2 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .sidebar nav {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 5px;
+    }
+
+    .sidebar nav a {
+        padding: 8px 2px !important;
+        font-size: 12px;
+    }
+
+    #themeBtn {
+        width: 100% !important;
+        margin-top: 12px;
+        padding: 10px;
+    }
+
+    .main {
+        margin-left: 0 !important;
+        width: 100% !important;
+
+        padding: 18px !important;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    header h1 {
+        font-size: 28px;
+    }
+
+    .cards {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+
+    .card {
+        width: 100% !important;
+        min-height: 120px;
+    }
+
+    .students-section,
+    .form-section,
+    .chart-box {
+        width: 100% !important;
+    }
+
+    form {
+        grid-template-columns: 1fr !important;
+    }
+
+    #searchInput {
+        width: 100% !important;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+}
 
     .app {
         display: block;
