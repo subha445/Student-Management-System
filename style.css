@@ -691,3 +691,148 @@ body.dark .login-box input {
     color: white;
     border-color: #4b5563;
 }
+/* ================= LOGIN PAGE ================= */
+
+.login-page {
+    min-height: 100vh;
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+}
+
+.login-container {
+    width: 100%;
+    max-width: 620px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.login-card {
+    background: white;
+    border-radius: 30px;
+    padding: 45px 35px;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.20);
+}
+
+.login-icon {
+    font-size: 75px;
+    margin-bottom: 10px;
+}
+
+.login-card h1 {
+    margin: 0;
+
+    font-size: 48px;
+
+    color: #2563eb;
+}
+
+.login-subtitle {
+    font-size: 25px;
+    color: #6b7280;
+
+    margin: 8px 0 35px;
+}
+
+.login-card input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 18px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 15px;
+
+    font-size: 20px;
+
+    outline: none;
+}
+
+.login-card input:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.login-btn {
+    width: 100%;
+
+    padding: 18px;
+
+    border: none;
+    border-radius: 15px;
+
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #7c3aed
+    );
+
+    color: white;
+
+    font-size: 22px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.login-btn:active {
+    transform: scale(0.98);
+}
+
+#loginMessage {
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+
+/* MOBILE */
+
+@media screen and (max-width: 600px) {
+
+    .login-container {
+        padding: 15px;
+    }
+
+    .login-card {
+        padding: 35px 22px;
+        border-radius: 25px;
+    }
+
+    .login-icon {
+        font-size: 60px;
+    }
+
+    .login-card h1 {
+        font-size: 40px;
+    }
+
+    .login-subtitle {
+        font-size: 21px;
+    }
+
+    .login-card input {
+        font-size: 17px;
+        padding: 15px;
+    }
+
+    .login-btn {
+        font-size: 19px;
+        padding: 15px;
+    }
+}
