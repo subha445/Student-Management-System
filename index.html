@@ -9,7 +9,6 @@
 
     <title>StudentHub - Admin Login</title>
 
-    <!-- Your main CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -29,6 +28,7 @@
                 Admin Login
             </p>
 
+
             <form id="loginForm">
 
                 <input
@@ -39,6 +39,7 @@
                     required
                 >
 
+
                 <input
                     type="password"
                     id="password"
@@ -47,9 +48,15 @@
                     required
                 >
 
-                <button type="submit" class="login-btn">
+
+                <button
+                    type="submit"
+                    class="login-btn">
+
                     Login
+
                 </button>
+
 
                 <p id="loginMessage"></p>
 
@@ -61,49 +68,71 @@
 
 
     <script>
+
+        /* =========================
+           ADMIN LOGIN
+        ========================= */
+
         document
             .getElementById("loginForm")
             .addEventListener("submit", function(event) {
 
                 event.preventDefault();
 
+
                 const username =
-                    document.getElementById("username").value.trim();
+                    document
+                    .getElementById("username")
+                    .value
+                    .trim();
+
 
                 const password =
-                    document.getElementById("password").value;
+                    document
+                    .getElementById("password")
+                    .value
+                    .trim();
+
 
                 const message =
-                    document.getElementById("loginMessage");
+                    document
+                    .getElementById("loginMessage");
 
 
-                /*
-                 * DEMO LOGIN
-                 * For a portfolio project only.
-                 */
+                /* LOGIN DETAILS */
 
                 if (
                     username === "admin" &&
                     password === "1234"
                 ) {
 
+                    /* Save login */
+
                     localStorage.setItem(
                         "adminLoggedIn",
                         "true"
                     );
 
-                    window.location.href = "index.html";
 
-                } else {
+                    /* Go to dashboard */
+
+                    window.location.href =
+                        "./index.html";
+
+                }
+
+                else {
 
                     message.textContent =
                         "❌ Invalid username or password";
 
-                    message.style.color = "#ef4444";
+                    message.style.color =
+                        "#ef4444";
 
                 }
 
             });
+
     </script>
 
 </body>
