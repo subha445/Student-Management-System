@@ -1,558 +1,296 @@
-let students =
-    JSON.parse(localStorage.getItem("students")) || [];
+
+/* =================================
+   STUDENT MANAGEMENT SYSTEM
+   CYBER GOLD EDITION
+================================= */
+
+let students = [];
+
+try {
+    students = JSON.parse(localStorage.getItem("students")) || [];
+    if (!Array.isArray(students)) students = [];
+} catch {
+    students = [];
+}
 
 let editIndex = -1;
+let marksChart = null;
 
+// ELEMENTS
 const form = document.getElementById("studentForm");
 const table = document.getElementById("studentTable");
 
+// SAVE DATA
+function saveData() {
+    localStorage.setItem("students", JSON.stringify(students));
+}
 
-/* ================= ADD / UPDATE STUDENT ================= */
+// ADD / UPDATE STUDENT
+if (form) {
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-form.addEventListener("submit", function (event) {
+        const name = document.getElementById("name").value.trim();
+        const roll = document.getElementById("roll").value.trim();
+        const marks = Number(document.getElementById("marks").value);
 
-    event.preventDefault();
+        if (!name || !roll || !Number.isFinite(marks)) {
+            alert("Please fill in all fields.");
+            return;
+        }
 
-    const name =
-        document.getElementById("name").value.trim();
+        if (marks < 0 || marks > 500) {
+            alert("Marks must be between 0 and 500.");
+            return;
+        }
 
-    const roll =
-        document.getElementById("roll").value.trim();
+        const duplicate = students.some((student, index) =>
+            student.roll.toLowerCase() === roll.toLowerCase() &&
+            index !== editIndex
+        );
 
-    const marks =
-        Number(document.getElementById("marks").value);
+        if (duplicate) {
+            alert("This roll number already exists.");
+            return;
+        }
 
+        const student = { name, roll, marks };
 
-    if (!name || !roll) {
-        alert("Please enter name and roll number.");
-        return;
-    }
+        if (editIndex === -1) {
+            students.push(student);
+        } else {
+            students[editIndex] = student;
+            editIndex = -1;
 
+            const addButton = document.querySelector(".add-btn");
+            if (addButton) addButton.textContent = "Add Student";
+        }
 
-    if (marks < 0 || marks > 500) {
-        alert("Marks must be between 0 and 500.");
-        return;
-    }
+        saveData();
+        form.reset();
+        displayStudents();
+    });
+}
 
-
-    const student = {
-        name: name,
-        roll: roll,
-        marks: marks
-    };
-
-
-    if (editIndex === -1) {
-
-        students.push(student);
-
-    } else {
-
-        students[editIndex] = student;
-
-        editIndex = -1;
-
-        document.querySelector(".add-btn").textContent =
-            "Add Student";
-    }
-
-
-    saveData();
-
-    form.reset();
-
-    displayStudents();
-
-});
-
-
-/* ================= DISPLAY STUDENTS ================= */
-
+// DISPLAY STUDENTS
 function displayStudents(data = students) {
+    if (!table) return;
 
     table.innerHTML = "";
 
-
     data.forEach((student) => {
+        const realIndex = students.indexOf(student);
+        const percentage = (student.marks / 500) * 100;
+        const grade = getGrade(percentage);
 
-        const realIndex =
-            students.indexOf(student);
+        const row = document.createElement("tr");
 
+        // Safe text rendering
+        [
+            student.name,
+            student.roll,
+            `${student.marks}/500`,
+            `${percentage.toFixed(1)}%`,
+            grade
+        ].forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+        });
 
-        const percentage =
-            ((student.marks / 500) * 100).toFixed(1);
+        const actions = document.createElement("td");
 
+        const editButton = document.createElement("button");
+        editButton.className = "edit-btn";
+        editButton.textContent = "✏️ Edit";
+        editButton.addEventListener("click", () => editStudent(realIndex));
 
-        const grade =
-            getGrade(Number(percentage));
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-btn";
+        deleteButton.textContent = "🗑️ Delete";
+        deleteButton.addEventListener("click", () => deleteStudent(realIndex));
 
-
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td>${student.name}</td>
-
-            <td>${student.roll}</td>
-
-            <td>${student.marks}/500</td>
-
-            <td>${percentage}%</td>
-
-            <td>${grade}</td>
-
-            <td>
-
-                <button
-                    class="edit-btn"
-                    onclick="editStudent(${realIndex})">
-
-                    ✏️ Edit
-
-                </button>
-
-
-                <button
-                    class="delete-btn"
-                    onclick="deleteStudent(${realIndex})">
-
-                    🗑️ Delete
-
-                </button>
-
-            </td>
-
-        `;
-
-
+        actions.append(editButton, deleteButton);
+        row.appendChild(actions);
         table.appendChild(row);
-
     });
 
-
     updateDashboard();
-
 }
 
-
-/* ================= GRADE ================= */
-
+// GRADE CALCULATION
 function getGrade(percentage) {
-
-    if (percentage >= 90)
-        return "A+";
-
-    if (percentage >= 80)
-        return "A";
-
-    if (percentage >= 70)
-        return "B";
-
-    if (percentage >= 60)
-        return "C";
-
-    if (percentage >= 50)
-        return "D";
-
+    if (percentage >= 90) return "A+";
+    if (percentage >= 80) return "A";
+    if (percentage >= 70) return "B";
+    if (percentage >= 60) return "C";
+    if (percentage >= 50) return "D";
     return "F";
 }
 
-
-/* ================= DELETE ================= */
-
-function deleteStudent(index) {
-
-    if (!students[index]) return;
-
-
-    const student =
-        students[index];
-
-
-    if (
-        confirm(
-            `Delete ${student.name}?`
-        )
-    ) {
-
-        students.splice(index, 1);
-
-        saveData();
-
-        displayStudents();
-
-    }
-
-}
-
-
-/* ================= EDIT ================= */
-
+// EDIT STUDENT
 function editStudent(index) {
+    const student = students[index];
+    if (!student) return;
 
-    if (!students[index]) return;
-
-
-    const student =
-        students[index];
-
-
-    document.getElementById("name").value =
-        student.name;
-
-
-    document.getElementById("roll").value =
-        student.roll;
-
-
-    document.getElementById("marks").value =
-        student.marks;
-
+    document.getElementById("name").value = student.name;
+    document.getElementById("roll").value = student.roll;
+    document.getElementById("marks").value = student.marks;
 
     editIndex = index;
 
+    const addButton = document.querySelector(".add-btn");
+    if (addButton) addButton.textContent = "Update Student";
 
-    document.querySelector(".add-btn").textContent =
-        "Update Student";
-
-
-    document
-        .getElementById("addStudent")
-        .scrollIntoView({
-            behavior: "smooth"
-        });
-
+    const section = document.getElementById("addStudent");
+    if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+    }
 }
 
+// DELETE STUDENT
+function deleteStudent(index) {
+    const student = students[index];
+    if (!student) return;
 
-/* ================= SEARCH ================= */
+    if (confirm(`Delete ${student.name}?`)) {
+        students.splice(index, 1);
 
-function searchStudents() {
+        if (editIndex === index) {
+            editIndex = -1;
+            form?.reset();
 
-    const search =
-        document
-        .getElementById("searchInput")
-        .value
-        .toLowerCase()
-        .trim();
+            const addButton = document.querySelector(".add-btn");
+            if (addButton) addButton.textContent = "Add Student";
+        } else if (editIndex > index) {
+            editIndex--;
+        }
 
-
-    if (search === "") {
-
+        saveData();
         displayStudents();
-
-        return;
-
     }
-
-
-    const filtered =
-        students.filter(student =>
-
-            student.name
-                .toLowerCase()
-                .includes(search)
-
-            ||
-
-            student.roll
-                .toLowerCase()
-                .includes(search)
-
-        );
-
-
-    displayStudents(filtered);
-
 }
 
+// SEARCH STUDENTS
+function searchStudents() {
+    const searchInput = document.getElementById("searchInput");
+    if (!searchInput) return;
 
-/* ================= DASHBOARD ================= */
+    const search = searchInput.value.toLowerCase().trim();
 
-function updateDashboard() {
-
-    document.getElementById("totalStudents")
-        .textContent = students.length;
-
-
-    if (students.length === 0) {
-
-        document.getElementById("averageMarks")
-            .textContent = "0";
-
-
-        document.getElementById("highestMark")
-            .textContent = "0";
-
-
-        updateChart();
-
-        return;
-
-    }
-
-
-    const total =
-        students.reduce(
-            (sum, student) =>
-                sum + student.marks,
-            0
-        );
-
-
-    const average =
-        total / students.length;
-
-
-    const highest =
-        Math.max(
-            ...students.map(
-                student => student.marks
-            )
-        );
-
-
-    document.getElementById("averageMarks")
-        .textContent =
-        average.toFixed(1);
-
-
-    document.getElementById("highestMark")
-        .textContent =
-        highest;
-
-
-    updateChart();
-
-}
-
-
-/* ================= SAVE DATA ================= */
-
-function saveData() {
-
-    localStorage.setItem(
-        "students",
-        JSON.stringify(students)
+    const filtered = students.filter(student =>
+        student.name.toLowerCase().includes(search) ||
+        student.roll.toLowerCase().includes(search)
     );
 
+    displayStudents(filtered);
 }
 
+// DASHBOARD
+function updateDashboard() {
+    const totalElement = document.getElementById("totalStudents");
+    const averageElement = document.getElementById("averageMarks");
+    const highestElement = document.getElementById("highestMark");
 
-/* ================= DARK MODE ================= */
+    if (totalElement) totalElement.textContent = students.length;
 
-function toggleTheme() {
-
-    document.body.classList.toggle("dark");
-
-
-    const button =
-        document.getElementById("themeBtn");
-
-
-    if (
-        document.body.classList.contains("dark")
-    ) {
-
-        button.textContent =
-            "☀️ Light Mode";
-
-    } else {
-
-        button.textContent =
-            "🌙 Dark Mode";
-
+    if (students.length === 0) {
+        if (averageElement) averageElement.textContent = "0";
+        if (highestElement) highestElement.textContent = "0";
+        updateChart();
+        return;
     }
 
+    const total = students.reduce((sum, student) =>
+        sum + Number(student.marks), 0
+    );
+
+    const average = total / students.length;
+    const highest = Math.max(...students.map(s => Number(s.marks)));
+
+    if (averageElement) averageElement.textContent = average.toFixed(1);
+    if (highestElement) highestElement.textContent = highest;
+
+    updateChart();
 }
 
-
-/* ================= CHART ================= */
-
-let marksChart = null;
-
-
+// CYBER GOLD CHART
 function updateChart() {
+    const canvas = document.getElementById("marksChart");
 
-    const canvas =
-        document.getElementById("marksChart");
-
-
-    if (!canvas) return;
-
-
-    const labels =
-        students.map(
-            student => student.name
-        );
-
-
-    const marks =
-        students.map(
-            student => student.marks
-        );
-
+    if (!canvas || typeof Chart === "undefined") return;
 
     if (marksChart) {
-
         marksChart.destroy();
-
     }
 
-
     marksChart = new Chart(canvas, {
-
         type: "bar",
 
         data: {
-
-            labels: labels,
+            labels: students.map(student => student.name),
 
             datasets: [{
-
-                label: "Marks",
-
-                data: marks
-
+                label: "Student Marks",
+                data: students.map(student => student.marks),
+                backgroundColor: "rgba(245, 197, 66, 0.65)",
+                borderColor: "#ffe16b",
+                borderWidth: 2,
+                borderRadius: 9,
+                hoverBackgroundColor: "#ffe16b"
             }]
-
         },
 
-
         options: {
-
             responsive: true,
-
             maintainAspectRatio: true,
 
+            plugins: {
+                legend: {
+                    labels: {
+                        color: "#ffe16b"
+                    }
+                }
+            },
+
             scales: {
+                x: {
+                    ticks: { color: "#c9b985" },
+                    grid: { color: "rgba(245,197,66,.08)" }
+                },
 
                 y: {
-
                     beginAtZero: true,
-
-                    max: 500
-
+                    max: 500,
+                    ticks: { color: "#c9b985" },
+                    grid: { color: "rgba(245,197,66,.1)" }
                 }
-
             }
-
         }
-
     });
-
 }
 
+// THEME BUTTON
+function toggleTheme() {
+    document.body.classList.toggle("light-mode");
 
-/* ================= INITIAL LOAD ================= */
+    const button = document.getElementById("themeBtn");
 
+    if (button) {
+        button.textContent =
+            document.body.classList.contains("light-mode")
+                ? "🌙 Dark Mode"
+                : "☀️ Light Mode";
+    }
+}
+
+// LOGOUT
+function logout() {
+    sessionStorage.removeItem("adminLoggedIn");
+    localStorage.removeItem("adminLoggedIn");
+    location.reload();
+}
+
+// INITIALIZE
 displayStudents();
-/* ================= ADMIN LOGIN ================= */
-
-function loginAdmin() {
-
-    const username =
-        document.getElementById("loginUsername").value.trim();
-
-    const password =
-        document.getElementById("loginPassword").value;
-
-    const error =
-        document.getElementById("loginError");
-
-
-    // Demo login
-    const loginForm = document.getElementById("loginForm");
-
-loginForm.addEventListener("submit", function(e) {
-
-    e.preventDefault();
-
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-
-    if (username === "admin" && password === "1234") {
-
-        localStorage.setItem("loggedIn", "true");
-
-        document.getElementById("loginPage").style.display = "none";
-
-    } else {
-
-        alert("Invalid username or password");
-
-    }
-
-});
-
-        document.getElementById("loginScreen").style.display =
-            "none";
-
-        document.getElementById("app").style.display =
-            "flex";
-
-        sessionStorage.setItem(
-            "adminLoggedIn",
-            "true"
-        );
-
-        error.textContent = "";
-
-    } else {
-
-        error.textContent =
-            "❌ Invalid username or password";
-
-    }
-
-}
-
-
-/* CHECK LOGIN */
-
-function checkLogin() {
-
-    const loggedIn =
-        sessionStorage.getItem("adminLoggedIn");
-
-
-    if (loggedIn === "true") {
-
-        document.getElementById("loginScreen").style.display =
-            "none";
-
-        document.getElementById("app").style.display =
-            "flex";
-
-    } else {
-
-        document.getElementById("loginScreen").style.display =
-            "flex";
-
-        document.getElementById("app").style.display =
-            "none";
-
-    }
-
-}
-
-
-/* ENTER KEY LOGIN */
-
-document.addEventListener("keydown", function(event) {
-
-    if (
-        event.key === "Enter" &&
-        document.getElementById("loginScreen").style.display !== "none"
-    ) {
-
-        loginAdmin();
-
-    }
-
-});
-
-
-checkLogin();
+                          
